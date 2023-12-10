@@ -1,14 +1,36 @@
-import { App, MessageEvent } from '@slack/bolt';
+import {
+  App,
+  FileSharedEvent,
+  LogLevel,
+  Middleware,
+  SlackEventMiddlewareArgs,
+} from '@slack/bolt';
 
 export class SlackService {
   private app: App;
 
-  constructor(token: string, signingSecret: string) {
+  constructor(botToken: string, appToken: string) {
     this.app = new App({
-      token,
-      signingSecret,
+      token: botToken,
+      appToken: appToken,
+      socketMode: true,
+      // logLevel: LogLevel.DEBUG,
     });
+
+    this.registerEventHandlers();
   }
+
+  private registerEventHandlers(): void {
+    this.app.event('file_shared', this.handleFileSharedEvent.bind(this));
+  }
+
+  private handleFileSharedEvent: Middleware<
+    SlackEventMiddlewareArgs<'file_shared'>
+  > = async ({ event, client }) => {
+    const { file, channel_id } = event as FileSharedEvent;
+
+    console.log(`A file was shared in the target channel: ${file.id}`);
+  };
 
   public async sendMessage(channel: string, text: string) {
     await this.app.client.chat.postMessage({
@@ -42,13 +64,11 @@ export class SlackService {
     });
   }
 
-  public async start(port: number | string) {
-    await this.app.start(port);
-    console.log('⚡️ SlackService is running!');
+  public async start() {
+    await this.app.start();
 
-    // general 채널에 메시지 보내서 앱 연결 테스트하기
     try {
-      await this.sendMessage('general', 'Hello, world!');
+      await this.sendMessage('general', '⚡️ Bolt app is running!');
       console.log('Message sent to general channel.');
     } catch (error) {
       console.error(`Failed to send message: ${error}`);
