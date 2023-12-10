@@ -1,8 +1,8 @@
 # Catch-up Bot
 
-STAY IN SYNC with Catch-Up Bot! This bot is built using the Clova API, effortlessly summarize missed meeting points on Slack, making catch-ups a breeze for seamless team collaboration.
+STAY IN SYNC with Catch-Up Bot. This bot is built using the Clova API, effortlessly summarize missed meeting points on Slack, making catch-ups a breeze for seamless team collaboration.
 
-# Installing
+# Installing(not supported yet)
 
 1. Clone the project
 
@@ -22,7 +22,7 @@ cd <directory_name>
 npm install
 ```
 
-# Usage
+# Usage(not supported yet)
 
 To start the Catch-Up Bot, you can use the following command:
 

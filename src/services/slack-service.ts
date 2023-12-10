@@ -9,6 +9,8 @@ import { WebClient } from '@slack/web-api';
 import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
+import ClovaService from './clova-service';
+import { checkEnvVariables } from '../utils/config';
 
 export class SlackService {
   private app: App;
@@ -56,7 +58,15 @@ export class SlackService {
           fileInfo.file.url_private
         );
 
-        // ready to use clova speech recognition api
+        // REFACTOR
+        const { clovaInvokeUrl, clovaSecretKey, backendUrl } =
+          checkEnvVariables();
+        const clovaService = new ClovaService(clovaInvokeUrl, clovaSecretKey);
+        const result = await clovaService.recognizeSpeech(fileDownloadedPath, {
+          language: 'ko-KR',
+          callback: `${backendUrl}/clova/callback`,
+          resultToObs: false,
+        });
       }
     } catch (error) {
       console.error(`Failed to handle file_shared event: ${error}`);
@@ -113,15 +123,14 @@ export class SlackService {
         responseType: 'stream',
       });
 
-      const downloadDir = path.join(__dirname, 'download');
+      const downloadDir = path.resolve(__dirname, '../../download');
       fs.mkdirSync(downloadDir, { recursive: true });
 
       const currentDateTime = new Date().toISOString().replace(/:/g, '-');
       const filename = path.basename(url).replace(/\.[^/.]+$/, '');
-      const extension = path.extname(url);
       const localPath = path.join(
         downloadDir,
-        `${filename}-${currentDateTime}${extension}`
+        `${filename}-${currentDateTime}.wav` // FIXME
       );
 
       await new Promise((resolve, reject) => {
