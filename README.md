@@ -1,6 +1,6 @@
 # Catch-up Bot
 
-STAY IN SYNC with Catch-Up Bot. This bot is built using the Clova API, effortlessly summarize missed meeting points on Slack, making catch-ups a breeze for seamless team collaboration.
+-
 
 # Installing(not supported yet)
 
