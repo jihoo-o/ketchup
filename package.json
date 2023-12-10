@@ -4,7 +4,9 @@
   "description": "Effortlessly catch up on missed Slack conversations with Catch-up Bot. This bot is built using the Clova API.",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "dev": "ts-node ./src/index.ts",
+    "build": "tsc",
+    "start": "node ./dist/index.js"
   },
   "keywords": [
     "clova-speech"
