@@ -1,0 +1,17 @@
+# .gitignore
+node_modules/
+*.log
+
+# Environment variables
+.env
+
+# IDE / editor specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# OS specific
+.DS_Store
+Thumbs.db
